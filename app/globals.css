@@ -1,0 +1,411 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Tokens — dark first, light via [data-theme="light"]
+--------------------------------------------------------------------------- */
+:root {
+  --bg: #080808;
+  --bg-2: #0b0d10;
+  --bg-3: #101217;
+  --surface: rgba(255, 255, 255, 0.025);
+  --surface-2: rgba(255, 255, 255, 0.05);
+  --fg: #f5f5f5;
+  --fg-2: #969aa3;
+  --fg-3: #7d828c;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-2: rgba(255, 255, 255, 0.18);
+  --accent: #7c7cff;
+  --accent-2: #45e6c0;
+  --accent-soft: rgba(124, 124, 255, 0.14);
+  --accent-fg: #0b0d10;
+  --glow: rgba(124, 124, 255, 0.35);
+  --noise-opacity: 0.045;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --gutter: clamp(1rem, 4vw, 3.5rem);
+  --nav-h: 72px;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #f4f4f1;
+  --bg-2: #ecece8;
+  --bg-3: #e4e4df;
+  --surface: rgba(10, 12, 16, 0.025);
+  --surface-2: rgba(10, 12, 16, 0.05);
+  --fg: #0b0d10;
+  --fg-2: #555a63;
+  --fg-3: #686d76;
+  --line: rgba(10, 12, 16, 0.1);
+  --line-2: rgba(10, 12, 16, 0.2);
+  --accent: #5454e8;
+  --accent-2: #0f9f7e;
+  --accent-soft: rgba(84, 84, 232, 0.1);
+  --accent-fg: #ffffff;
+  --glow: rgba(84, 84, 232, 0.22);
+  --noise-opacity: 0.03;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-fg: var(--accent-fg);
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@layer base {
+html {
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--nav-h);
+}
+
+html:not(.lenis) {
+  scroll-behavior: smooth;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  min-height: 100svh;
+  transition: background-color 0.3s var(--ease-out), color 0.3s var(--ease-out);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+}
+
+/* Custom cursor: only hide the native cursor when the custom one is active */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+html.has-cursor input,
+html.has-cursor textarea {
+  cursor: text !important;
+}
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+--------------------------------------------------------------------------- */
+@utility container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+
+@utility hairline {
+  border-color: var(--line);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
+@utility display {
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+@utility heading {
+  font-weight: 560;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+@layer components {
+.bg-grid {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+}
+
+.noise {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.card {
+  position: relative;
+  border: 1px solid var(--line);
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border-radius: 20px;
+}
+
+/* Pointer-tracked border glow (set --mx/--my via JS) */
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), var(--accent), transparent 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+  pointer-events: none;
+}
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 0%), var(--accent-soft), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+  pointer-events: none;
+}
+.glow-card:hover::before,
+.glow-card:hover::after,
+.glow-card:focus-within::before,
+.glow-card:focus-within::after {
+  opacity: 1;
+}
+
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s var(--ease-out);
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+}
+
+/* Animated flow connectors (AI Lab) */
+@keyframes flow-x {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+@keyframes flow-y {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(400%); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+@keyframes wave {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+.animate-float { animation: float-y 6s ease-in-out infinite; }
+.animate-marquee { animation: marquee 40s linear infinite; }
+.animate-blink { animation: blink 1s step-end infinite; }
+
+/* ---------------------------------------------------------------------------
+   Intro (CSS-driven so it paints before hydration — good for LCP)
+   --intro delays the hero until the preloader has wiped away.
+--------------------------------------------------------------------------- */
+html:not([data-preloaded]) {
+  --intro: 0.95s;
+}
+@keyframes rise {
+  from { transform: translateY(110%) rotate(2deg); }
+  to { transform: none; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.intro-rise {
+  display: inline-block;
+  animation: rise 0.85s var(--ease-out) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro, 0s));
+}
+.intro-fade {
+  animation: fade-up 0.7s var(--ease-out) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro, 0s));
+}
+@keyframes clip-in {
+  from { opacity: 0; clip-path: inset(10% 5% 0% 5% round 28px); }
+  to { opacity: 1; clip-path: inset(0 0 0 0 round 0px); }
+}
+.intro-clip {
+  animation: clip-in 1s var(--ease-out) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro, 0s));
+}
+/* Wipe reveal: the text is painted immediately (good for LCP) under a cover
+   that retracts, while the glyphs settle with a small lift. */
+@keyframes wipe-cover {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+@keyframes settle {
+  from { transform: translateY(0.12em); }
+  to { transform: none; }
+}
+.intro-wipe {
+  position: relative;
+  display: inline-block;
+  animation: settle 1s var(--ease-out) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro, 0s));
+}
+.intro-wipe::after {
+  content: "";
+  position: absolute;
+  inset: -0.04em -0.06em -0.1em;
+  background: var(--bg);
+  transform-origin: right;
+  animation: wipe-cover 0.9s var(--ease-in-out) both;
+  animation-delay: calc(var(--d, 0s) + var(--intro, 0s));
+}
+
+/* Preloader: fully CSS-timed; JS only removes it afterwards.
+   Visibility is decided before paint by the inline boot script. */
+html[data-preloaded] #preloader {
+  display: none;
+}
+@property --p {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+@keyframes preloader-exit {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 0 100% 0); visibility: hidden; }
+}
+@keyframes preloader-bar {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes preloader-count {
+  from { --p: 0; }
+  to { --p: 100; }
+}
+#preloader {
+  animation: preloader-exit 0.55s var(--ease-in-out) 0.95s forwards;
+}
+.preloader-bar {
+  transform-origin: left;
+  animation: preloader-bar 0.85s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+.preloader-count {
+  animation: preloader-count 0.85s cubic-bezier(0.45, 0, 0.2, 1) both;
+  counter-reset: p var(--p);
+}
+.preloader-count::after {
+  content: counter(p);
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  html:not(.lenis) {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  #preloader {
+    display: none;
+  }
+  .intro-rise,
+  .intro-fade,
+  .intro-clip,
+  .intro-wipe,
+  .intro-wipe::after {
+    animation: none !important;
+  }
+  .intro-wipe::after {
+    display: none;
+  }
+}
