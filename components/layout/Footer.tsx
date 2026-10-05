@@ -9,6 +9,8 @@ export function Footer() {
   const links = [
     { label: "GitHub", icon: "github", ...profileLink("github") },
     { label: "LinkedIn", icon: "linkedin", ...profileLink("linkedin") },
+    { label: "Facebook", icon: "facebook", ...profileLink("facebook") },
+    { label: "Instagram", icon: "instagram", ...profileLink("instagram") },
     { label: "Email", icon: "mail", ...profileLink("email") },
   ];
 

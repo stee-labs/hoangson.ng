@@ -70,7 +70,7 @@ const personJsonLd = {
   image: absoluteUrl("/images/portrait.jpg"),
   address: { "@type": "PostalAddress", addressCountry: "VN" },
   knowsAbout: ["Web development", "Mobile development", "UI/UX", "Product development", "Artificial intelligence", "Hospitality technology", "Loyalty programs", "E-commerce"],
-  sameAs: [site.links.github, site.links.linkedin].filter(Boolean),
+  sameAs: [site.links.github, site.links.linkedin, site.links.facebook, site.links.instagram].filter(Boolean),
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

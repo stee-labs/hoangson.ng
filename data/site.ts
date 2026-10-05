@@ -32,8 +32,9 @@ export const site = {
     // TODO: add real profile URLs
     github: "",
     linkedin: "",
-    // TODO: add real email address
-    email: "",
+    facebook: "https://www.facebook.com/st.highside/",
+    instagram: "https://www.instagram.com/son.nguyennn",
+    email: "hoangson1vn.work@gmail.com",
   },
 
   nav: [

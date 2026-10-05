@@ -1,12 +1,20 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { TextReveal } from "@/components/animations/TextReveal";
 import { Button } from "@/components/ui/Button";
+import { site } from "@/data/site";
 import { profileLink } from "@/lib/links";
 
 export function Contact() {
   const email = profileLink("email");
-  const github = profileLink("github");
-  const linkedin = profileLink("linkedin");
+  // Only real profiles get a button here; empty ones still show as "(soon)" in the footer.
+  const socials = (
+    [
+      { label: "GitHub", ...profileLink("github") },
+      { label: "LinkedIn", ...profileLink("linkedin") },
+      { label: "Facebook", ...profileLink("facebook") },
+      { label: "Instagram", ...profileLink("instagram") },
+    ] as const
+  ).filter((l) => !l.placeholder);
 
   return (
     <section id="contact" aria-labelledby="contact-title" className="relative isolate overflow-hidden border-t border-line py-28 md:py-44">
@@ -28,17 +36,21 @@ export function Contact() {
         <div className="mt-12 flex flex-col gap-10 md:mt-16 md:flex-row md:items-end md:justify-between">
           <Reveal delay={0.1}>
             <p className="max-w-sm text-pretty text-lg leading-snug text-fg-2 md:text-xl">Have an interesting product, technical challenge or idea?</p>
+            {!email.placeholder && (
+              <a href={email.href} className="link-underline mt-4 inline-block font-mono text-sm text-fg-3 transition-colors hover:text-fg">
+                {site.links.email}
+              </a>
+            )}
           </Reveal>
           <Reveal delay={0.2} className="flex flex-wrap gap-3">
             <Button href={email.href} placeholder={email.placeholder} size="lg">
               Get in touch
             </Button>
-            <Button href={github.href} placeholder={github.placeholder} external={github.external} variant="ghost" size="lg" icon="arrow-up-right">
-              GitHub
-            </Button>
-            <Button href={linkedin.href} placeholder={linkedin.placeholder} external={linkedin.external} variant="ghost" size="lg" icon="arrow-up-right">
-              LinkedIn
-            </Button>
+            {socials.map((l) => (
+              <Button key={l.label} href={l.href} external={l.external} variant="ghost" size="lg" icon="arrow-up-right">
+                {l.label}
+              </Button>
+            ))}
           </Reveal>
         </div>
       </div>
